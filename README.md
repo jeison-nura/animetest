@@ -90,7 +90,19 @@ We welcome contributions! Please follow these steps:
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](./LICENSE) file for details.
+Private License
+
+Copyright (c) [2025] jeison
+
+This software is strictly private and may not be used, distributed, modified, or copied in any form without the explicit written consent of the copyright holder. The software is intended for internal use only and may not be shared, sublicensed, or otherwise distributed to any third parties.
+
+Any attempt to reverse engineer, decompile, disassemble, or otherwise alter the software is prohibited.
+
+The software is provided "as is," with no warranties of any kind, express or implied, including but not limited to warranties of merchantability, fitness for a particular purpose, or non-infringement.
+
+Any unauthorized use, distribution, or modification of this software is a violation of this license and may result in legal action.
+
+For permission to use, distribute, or modify this software, please contact jeison at jeisonnoc@gmail.com.
 
 ---
 
