@@ -45,7 +45,7 @@ export default function Carousel({ data }) {
   }, []);
 
   return (
-    <div className="relative w-full max-w-4xl mx-auto overflow-hidden rounded-xl">
+    <div className="relative w-full max-w-6xl mx-auto overflow-hidden rounded-xl">
       <div
         className="flex transition-transform duration-300 ease-in-out"
         style={{ transform: `translateX(-${activeIndex * 100}%)` }}
@@ -65,17 +65,15 @@ export default function Carousel({ data }) {
         })}
       </div>
       <Button
-        className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-transparent bg-opacity-50 hover:bg-opacity-75 rounded-full p-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+        className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-transparent bg-opacity-50 hover:bg-opacity-75 rounded-full p-2 focus:outline-none focus:ring-indigo-500 active:bg-opacity-75"
         onClick={prevSlide}
-        aria-label="Previous slide"
         variant="ghost"
       >
         <ChevronLeftIcon style={{ width: "1.5rem", height: "1.5rem" }} />
       </Button>
       <Button
-        className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-transparent bg-opacity-50 hover:bg-opacity-75 rounded-full p-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+        className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-transparent bg-opacity-50 hover:bg-opacity-75 rounded-full p-2 focus:outline-none focus:ring-indigo-500 active:bg-opacity-75"
         onClick={nextSlide}
-        aria-label="Next slide"
         variant="ghost"
       >
         <ChevronRightIcon style={{ width: "1.5rem", height: "1.5rem" }} />
@@ -88,7 +86,6 @@ export default function Carousel({ data }) {
               index === activeIndex ? "bg-black" : "bg-white bg-opacity-50"
             }`}
             onClick={() => setActiveIndex(index)}
-            aria-label={`Go to slide ${index + 1}`}
           />
         ))}
       </div>

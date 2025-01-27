@@ -4,20 +4,17 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { Ellipsis, Star } from "lucide-react";
 
-export const AnimeCard = () => {
-  const imageLoader = ({ src }) => {
-    return `https://static.zerochan.net/${src}`;
-  };
+export const AnimeCard = ({ item }) => {
   return (
-    <Card className="w-[300] border-none">
+    <Card className="w-full border-none shadow-none bg-transparent">
       <CardContent className="p-2">
         <Image
-          loader={imageLoader}
-          src="Mirai.Nikki.full.935960.jpg"
-          alt="pictId"
+          src={item.url}
+          alt={item.name}
           width={500}
           height={500}
           className="rounded-xl"
+          unoptimized
           priority
         />
       </CardContent>
