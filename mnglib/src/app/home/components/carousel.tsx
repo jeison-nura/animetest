@@ -45,7 +45,7 @@ export default function Carousel({ data }) {
   }, []);
 
   return (
-    <div className="relative w-full max-w-4xl mx-auto overflow-hidden h-36">
+    <div className="relative w-full max-w-4xl mx-auto overflow-hidden rounded-xl">
       <div
         className="flex transition-transform duration-300 ease-in-out"
         style={{ transform: `translateX(-${activeIndex * 100}%)` }}
@@ -55,11 +55,13 @@ export default function Carousel({ data }) {
       >
         {items.map((item, index: number) => {
           console.log(item);
-          <CarouselItem
-            item={item}
-            key={item.id}
-            isActive={index === activeIndex}
-          />;
+          return (
+            <CarouselItem
+              item={item}
+              key={item.id}
+              isActive={index === activeIndex}
+            />
+          );
         })}
       </div>
       <Button

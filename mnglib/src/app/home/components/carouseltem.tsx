@@ -1,10 +1,7 @@
-"use client";
 import Image from "next/image";
 import React from "react";
 
 export const CarouselItem = ({ item, isActive }) => {
-  console.log(item, "hi");
-  console.log("llegue a este componente");
   return (
     <div
       className={`relative flex-shrink-0 w-full h-64 md:h-96 transition-opacity duration-300 ${
@@ -13,8 +10,11 @@ export const CarouselItem = ({ item, isActive }) => {
     >
       <Image
         src={item.url}
-        className="w-full h-full object-cover rounded-lg"
+        className=" w-full h-full object-cover rounded-lg "
         alt={item.name}
+        width={500}
+        height={500}
+        unoptimized
         priority
       />
       <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4">
