@@ -1,114 +1,97 @@
-Anime Streaming and Manga Reading Platform
+# Anime Streaming and Manga Reading Platform
 
-Welcome to the Anime Streaming and Manga Reading Platform! This is a comprehensive web application that combines the best of anime streaming and manga reading into one seamless experience. The platform is built with modern tools and technologies to ensure a scalable, fast, and enjoyable user experience.
+Welcome to the **Anime Streaming and Manga Reading Platform**! This is a comprehensive web application that combines the best of anime streaming and manga reading into one seamless experience. The platform is built with modern tools and technologies to ensure a scalable, fast, and enjoyable user experience.
 
-Features
+## Features
 
-Stream Anime: Watch your favorite anime with a smooth and responsive interface.
+- **Stream Anime**: Watch your favorite anime with a smooth and responsive interface.
+- **Read Manga**: Enjoy high-quality manga scans in an easy-to-navigate reader.
+- **Modern UI/UX**: Built with Next.js 15, React v19, ShadCN UI, and Lucide for a visually appealing and user-friendly design.
+- **Multi-Service Architecture**: Designed for scalability and flexibility using a microservices approach.
 
-Read Manga: Enjoy high-quality manga scans in an easy-to-navigate reader.
+## Tech Stack
 
-Modern UI/UX: Built with Next.js 15, React v19, ShadCN UI, and Lucide for a visually appealing and user-friendly design.
+### **Frontend**
 
-Multi-Service Architecture: Designed for scalability and flexibility using a microservices approach.
+- **Next.js 15**: For server-side rendering and efficient page-based routing.
+- **React v19**: To build a fast and reactive user interface.
+- **ShadCN UI**: For an elegant, customizable component library.
+- **Lucide Icons**: To provide modern and dynamic icons.
 
-Tech Stack
+### **Backend**
 
-Frontend
+- **Go**: Planned as the primary backend language for its performance and simplicity.
+- **Java**: Considered for microservices, especially for specific high-load use cases.
+- **Docker**: For containerization and easy deployment.
 
-Next.js 15: For server-side rendering and efficient page-based routing.
+### **Database**
 
-React v19: To build a fast and reactive user interface.
+- **MongoDB**: A flexible NoSQL database for storing user data, anime details, and manga content.
 
-ShadCN UI: For an elegant, customizable component library.
+### **Caching and Task Management**
 
-Lucide Icons: To provide modern and dynamic icons.
+- **Redis**: Used for caching to improve application performance.
+- **Task Queueing** (Planned):
+  - **Kafka**: For distributed message streaming if needed.
+  - **Redis**: As a lightweight alternative for task queueing if required.
 
-Backend
+## Deployment
 
-Go: Planned as the primary backend language for its performance and simplicity.
+The application is designed to be containerized with **Docker** for consistent deployment across different environments.
 
-Java: Considered for microservices, especially for specific high-load use cases.
+## Future Plans
 
-Docker: For containerization and easy deployment.
+- Implement task queueing for background jobs like email notifications and data preprocessing.
+- Add personalized recommendations using machine learning.
+- Optimize for mobile with a Progressive Web App (PWA).
+- Introduce multi-language support for global accessibility.
 
-Database
+## Getting Started
 
-MongoDB: A flexible NoSQL database for storing user data, anime details, and manga content.
+### **Prerequisites**
 
-Caching and Task Management
+- Node.js and npm installed.
+- Docker installed for running services locally.
 
-Redis: Used for caching to improve application performance.
+### **Installation**
 
-Task Queueing (Planned):
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/your-username/your-repo.git
+   cd your-repo
+   ```
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Start the development server:
+   ```bash
+   npm run dev
+   ```
 
-Kafka: For distributed message streaming if needed.
+### **Backend Setup**
 
-Redis: As a lightweight alternative for task queueing if required.
+- Backend services will be implemented in **Go** and **Java**.
+- Use Docker Compose to orchestrate services during development.
 
-Deployment
+### **Redis Setup**
 
-The application is designed to be containerized with Docker for consistent deployment across different environments.
+1. Install Redis locally or use a cloud provider.
+2. Update the `.env` file with Redis connection details.
 
-Future Plans
-
-Implement task queueing for background jobs like email notifications and data preprocessing.
-
-Add personalized recommendations using machine learning.
-
-Optimize for mobile with a Progressive Web App (PWA).
-
-Introduce multi-language support for global accessibility.
-
-Getting Started
-
-Prerequisites
-
-Node.js and npm installed.
-
-Docker installed for running services locally.
-
-Installation
-
-Clone the repository:
-
-git clone https://github.com/your-username/your-repo.git
-cd your-repo
-
-Install dependencies:
-
-npm install
-
-Start the development server:
-
-npm run dev
-
-Backend Setup
-
-Backend services will be implemented in Go and Java.
-
-Use Docker Compose to orchestrate services during development.
-
-Redis Setup
-
-Install Redis locally or use a cloud provider.
-
-Update the .env file with Redis connection details.
-
-Contributing
+## Contributing
 
 We welcome contributions! Please follow these steps:
 
-Fork the repository.
+1. Fork the repository.
+2. Create a new branch for your feature/bug fix.
+3. Commit your changes and push them to your fork.
+4. Open a pull request to the `main` branch.
 
-Create a new branch for your feature/bug fix.
+## License
 
-Commit your changes and push them to your fork.
+This project is licensed under the MIT License. See the [LICENSE](./LICENSE) file for details.
 
-Open a pull request to the main branch.
-
-License
-
-This project is licensed under the MIT License. See the LICENSE file for details.
+---
 
 Thank you for being part of this journey! We hope you enjoy the platform and look forward to your feedback.
