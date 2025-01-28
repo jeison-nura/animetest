@@ -10,7 +10,7 @@ export const CarouselItem = ({ item, isActive }) => {
     >
       <Image
         src={item.url}
-        className=" w-full h-full object-cover rounded-xl "
+        className=" w-full h-full object-none rounded-xl "
         alt={item.name}
         width={500}
         height={500}
