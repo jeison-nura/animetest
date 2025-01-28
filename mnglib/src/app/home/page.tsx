@@ -1,5 +1,7 @@
+import { Button } from "@/components/ui/button";
 import { AnimeCard } from "./components/card";
 import Carousel from "./components/carousel";
+import { ChevronRightIcon } from "lucide-react";
 
 export default function Page() {
   const data = {
@@ -33,8 +35,15 @@ export default function Page() {
     interval: 15000,
   };
   return (
-    <div className="p-5 rounded-xl bg-gradient-to-tl from-indigo-500 from-10% to-blue-700 to-90%">
+    <div className="p-5 rounded-xl bg-linear-to-b from-black from-40% to-blue-800 to-60%">
       <Carousel data={data}></Carousel>
+      <section className="justify-between flex items-center m-3">
+        <h1 className="font-bold text-2xl  text-amber-50">Latest content</h1>
+        <Button className="bg-transparent border-none shadow-none text-2xl">
+          Browse
+          <ChevronRightIcon />
+        </Button>
+      </section>
       <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {data.items.map((item) => {
           return <AnimeCard key={item.id} item={item} />;

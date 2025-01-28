@@ -45,7 +45,7 @@ export default function Carousel({ data }) {
   }, []);
 
   return (
-    <div className="relative w-full max-w-6xl mx-auto overflow-hidden rounded-xl">
+    <div className="relative w-full max-w-8xl mx-auto overflow-hidden rounded-xl">
       <div
         className="flex transition-transform duration-300 ease-in-out"
         style={{ transform: `translateX(-${activeIndex * 100}%)` }}
@@ -65,14 +65,14 @@ export default function Carousel({ data }) {
         })}
       </div>
       <Button
-        className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-transparent bg-opacity-50 hover:bg-opacity-75 rounded-full p-2 focus:outline-none focus:ring-indigo-500 active:bg-opacity-75"
+        className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-transparent bg-opacity-50 hover:bg-opacity-75 rounded-full p-2 focus:outline-hidden focus:ring-indigo-500 active:bg-opacity-75"
         onClick={prevSlide}
         variant="ghost"
       >
         <ChevronLeftIcon style={{ width: "1.5rem", height: "1.5rem" }} />
       </Button>
       <Button
-        className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-transparent bg-opacity-50 hover:bg-opacity-75 rounded-full p-2 focus:outline-none focus:ring-indigo-500 active:bg-opacity-75"
+        className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-transparent bg-opacity-50 hover:bg-opacity-75 rounded-full p-2 focus:outline-hidden focus:ring-indigo-500 active:bg-opacity-75"
         onClick={nextSlide}
         variant="ghost"
       >
@@ -82,7 +82,7 @@ export default function Carousel({ data }) {
         {items.map((_: never, index: number) => (
           <button
             key={index}
-            className={`w-3 h-3 rounded-full focus:outline-none ${
+            className={`w-3 h-3 rounded-full focus:outline-hidden ${
               index === activeIndex ? "bg-black" : "bg-white bg-opacity-50"
             }`}
             onClick={() => setActiveIndex(index)}
