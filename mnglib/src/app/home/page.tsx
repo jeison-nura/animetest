@@ -35,7 +35,7 @@ export default function Page() {
     interval: 15000,
   };
   return (
-    <div className="h-screen p-5 rounded-xl bg-linear-to-b from-black from-40% to-blue-800 to-60%">
+    <div className="relative overflow-hidden min-h-screen p-5 rounded-xl bg-linear-to-b from-black from-40% to-blue-800 to-60%">
       <Carousel data={data}></Carousel>
       <section className="justify-between flex items-center m-3">
         <h1 className="font-bold text-2xl  text-amber-50">Latest content</h1>
