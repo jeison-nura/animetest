@@ -3,8 +3,9 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { Ellipsis, Star } from "lucide-react";
+import { AnimeCardProps } from "@/lib/types/components";
 
-export const AnimeCard = ({ item }) => {
+export const AnimeCard = ({ item }: AnimeCardProps) => {
   return (
     <Card className="w-full border-none shadow-none bg-transparent">
       <CardContent className="p-2">
