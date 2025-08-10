@@ -4,8 +4,16 @@ import React, { useEffect, useState } from "react";
 import { CarouselItem } from "./carouseltem";
 import { Button } from "@/components/ui/button";
 
-export default function Carousel({ data }) {
-  const { items = {}, interval = 3000 } = data;
+interface CarouselData {
+  items: Array<{
+    id: string | number;
+    [key: string]: any;
+  }>;
+  interval?: number;
+}
+
+export default function Carousel({ data }: { data: CarouselData }) {
+  const { items = [], interval = 3000 } = data;
   const [activeIndex, setActiveIndex] = useState(0);
   const [touchStart, setTouchStart] = useState(0);
   const [touchEnd, setTouchEnd] = useState(0);
@@ -79,7 +87,7 @@ export default function Carousel({ data }) {
         <ChevronRightIcon style={{ width: "1.5rem", height: "1.5rem" }} />
       </Button>
       <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
-        {items.map((_: never, index: number) => (
+        {items.map((_, index: number) => (
           <button
             key={index}
             className={`w-3 h-3 rounded-full focus:outline-hidden ${
