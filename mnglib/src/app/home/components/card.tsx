@@ -4,7 +4,12 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { Ellipsis, Star } from "lucide-react";
 
-export const AnimeCard = ({ item }) => {
+interface AnimeItem {
+  url: string;
+  name: string;
+}
+
+export const AnimeCard = ({ item }: { item: AnimeItem }) => {
   return (
     <Card className="w-full border-none shadow-none bg-transparent">
       <CardContent className="p-2">

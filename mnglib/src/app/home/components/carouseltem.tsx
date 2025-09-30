@@ -1,7 +1,16 @@
 import Image from "next/image";
 import React from "react";
 
-export const CarouselItem = ({ item, isActive }) => {
+interface CarouselItemProps {
+  item: {
+    url: string;
+    name: string;
+    [key: string]: string | number | boolean;
+  };
+  isActive: boolean;
+}
+
+export const CarouselItem = ({ item, isActive }: CarouselItemProps) => {
   return (
     <div
       className={`relative shrink-0 w-full h-64 md:h-96 transition-opacity duration-300 ${
