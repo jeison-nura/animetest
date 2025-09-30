@@ -1,13 +1,15 @@
 "use client";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { CarouselItem } from "./carouseltem";
 import { Button } from "@/components/ui/button";
 
 interface CarouselData {
   items: Array<{
     id: string | number;
-    [key: string]: any;
+    url: string;
+    name: string;
+    [key: string]: string | number | boolean;
   }>;
   interval?: number;
 }
@@ -18,22 +20,26 @@ export default function Carousel({ data }: { data: CarouselData }) {
   const [touchStart, setTouchStart] = useState(0);
   const [touchEnd, setTouchEnd] = useState(0);
 
-  const nextSlide = () => {
+  const nextSlide = useCallback(() => {
     setActiveIndex((prevIndex) => (prevIndex + 1) % items.length);
-  };
+  }, [items.length]);
 
-  const prevSlide = () => {
+  const prevSlide = useCallback(() => {
     setActiveIndex(
       (prevIndex) => (prevIndex - 1 + items.length) % items.length
     );
-  };
+  }, [items.length]);
 
   const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
-    setTouchStart(e.targetTouches[0].clientX);
+    if (e.targetTouches && e.targetTouches[0]) {
+      setTouchStart(e.targetTouches[0].clientX);
+    }
   };
 
   const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
-    setTouchEnd(e.targetTouches[0].clientX);
+    if (e.targetTouches && e.targetTouches[0]) {
+      setTouchEnd(e.targetTouches[0].clientX);
+    }
   };
 
   const handleTouchEnd = () => {
@@ -50,7 +56,7 @@ export default function Carousel({ data }: { data: CarouselData }) {
       nextSlide();
     }, interval);
     return () => clearInterval(autoSlide);
-  }, []);
+  }, [interval, nextSlide]);
 
   return (
     <div className="relative w-full max-w-8xl mx-auto overflow-hidden rounded-xl">
@@ -62,7 +68,7 @@ export default function Carousel({ data }: { data: CarouselData }) {
         onTouchEnd={handleTouchEnd}
       >
         {items.map((item, index: number) => {
-          console.log(item);
+          // Manejar elemento del carrusel
           return (
             <CarouselItem
               item={item}
