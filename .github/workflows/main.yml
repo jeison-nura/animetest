@@ -8,6 +8,8 @@ jobs:
   notify:
     runs-on: ubuntu-latest
     steps:
+      - name: Echo webhook URL
+        run: echo "Using webhook URL: ${{ secrets.DISCORD_WEBHOOK }}"
       - name: Send Discord notification
         uses: rjstone/discord-webhook-notify@v2
         with:
