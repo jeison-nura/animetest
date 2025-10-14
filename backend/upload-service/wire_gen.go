@@ -8,11 +8,18 @@ package main
 
 import (
 	"github.com/animetest/backend/upload-service/internal/infrastructure/config"
+	"github.com/animetest/backend/upload-service/internal/infrastructure/mockData"
 	"github.com/gin-gonic/gin"
 )
 
 // Injectors from wire.go:
 
 func InitializeApp(cfg config.Config, router *gin.Engine) (*gin.Engine, error) {
+	mangaRepository := mockData.NewMockMangaRepository()
+	chapterRepository := mockData.NewMockChapterRepository()
+	volumeRepository := mockData.NewMockVolumeRepository()
+	_ = mangaRepository
+	_ = chapterRepository
+	_ = volumeRepository
 	return router, nil
 }
