@@ -7,7 +7,7 @@
 package main
 
 import (
-	"github.com/animetest/backend/upload-service/internal/config"
+	"github.com/animetest/backend/upload-service/internal/infrastructure/config"
 	"github.com/gin-gonic/gin"
 )
 
