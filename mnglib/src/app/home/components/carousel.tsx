@@ -3,9 +3,10 @@ import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { CarouselItem } from "./carouseltem";
 import { Button } from "@/components/ui/button";
+import { CarouselProps } from "@/lib/types/components";
 
-export default function Carousel({ data }) {
-  const { items = {}, interval = 3000 } = data;
+export default function Carousel({ data }: CarouselProps) {
+  const { items = [], interval = 3000 } = data;
   const [activeIndex, setActiveIndex] = useState(0);
   const [touchStart, setTouchStart] = useState(0);
   const [touchEnd, setTouchEnd] = useState(0);
@@ -42,10 +43,10 @@ export default function Carousel({ data }) {
       nextSlide();
     }, interval);
     return () => clearInterval(autoSlide);
-  }, []);
+  }, [interval, nextSlide, items]);
 
   return (
-    <div className="relative w-full max-w-8xl mx-auto overflow-hidden rounded-xl">
+    <div className="relative w-full max-w-8xl mx-auto overflow-hidden rounded-xl mb-6 scrollbar-hide">
       <div
         className="flex transition-transform duration-300 ease-in-out"
         style={{ transform: `translateX(-${activeIndex * 100}%)` }}
@@ -54,7 +55,6 @@ export default function Carousel({ data }) {
         onTouchEnd={handleTouchEnd}
       >
         {items.map((item, index: number) => {
-          console.log(item);
           return (
             <CarouselItem
               item={item}
@@ -65,25 +65,25 @@ export default function Carousel({ data }) {
         })}
       </div>
       <Button
-        className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-transparent bg-opacity-50 hover:bg-opacity-75 rounded-full p-2 focus:outline-hidden focus:ring-indigo-500 active:bg-opacity-75"
+        className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-transparent hover:bg-[#8a55f8]/20 rounded-full p-2 focus:outline-hidden z-50"
         onClick={prevSlide}
         variant="ghost"
       >
         <ChevronLeftIcon style={{ width: "1.5rem", height: "1.5rem" }} />
       </Button>
       <Button
-        className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-transparent bg-opacity-50 hover:bg-opacity-75 rounded-full p-2 focus:outline-hidden focus:ring-indigo-500 active:bg-opacity-75"
+        className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-transparent hover:bg-[#8a55f8]/20 rounded-full p-2 focus:outline-hidden z-50"
         onClick={nextSlide}
         variant="ghost"
       >
         <ChevronRightIcon style={{ width: "1.5rem", height: "1.5rem" }} />
       </Button>
-      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
-        {items.map((_: never, index: number) => (
+      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-3 z-50">
+        {items.map((_, index: number) => (
           <button
             key={index}
-            className={`w-3 h-3 rounded-full focus:outline-hidden ${
-              index === activeIndex ? "bg-black" : "bg-white bg-opacity-50"
+            className={`w-2 h-2 rounded-full focus:outline-hidden transition-all ${
+              index === activeIndex ? "bg-white w-4" : "bg-white/50"
             }`}
             onClick={() => setActiveIndex(index)}
           />

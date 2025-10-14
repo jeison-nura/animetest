@@ -1,4 +1,4 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -132,5 +132,23 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+/* Ocultar scrollbars manteniendo la funcionalidad */
+@layer utilities {
+  /* Para Chrome, Safari y Opera */
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Para Firefox */
+  .scrollbar-hide {
+    scrollbar-width: none;
+  }
+
+  /* Para IE y Edge */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
   }
 }
