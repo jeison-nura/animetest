@@ -7,6 +7,8 @@
 package main
 
 import (
+	"github.com/animetest/backend/upload-service/internal/application/routes"
+	"github.com/animetest/backend/upload-service/internal/application/useCases"
 	"github.com/animetest/backend/upload-service/internal/infrastructure/config"
 	"github.com/animetest/backend/upload-service/internal/infrastructure/mockData"
 	"github.com/gin-gonic/gin"
@@ -18,7 +20,8 @@ func InitializeApp(cfg config.Config, router *gin.Engine) (*gin.Engine, error) {
 	mangaRepository := mockData.NewMockMangaRepository()
 	chapterRepository := mockData.NewMockChapterRepository()
 	volumeRepository := mockData.NewMockVolumeRepository()
-	_ = mangaRepository
+	getMangaByIDUseCase := useCases.NewGetMangaByIDUseCase(mangaRepository)
+	routes.SetupRoutes(router, getMangaByIDUseCase)
 	_ = chapterRepository
 	_ = volumeRepository
 	return router, nil
