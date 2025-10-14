@@ -8,8 +8,11 @@ jobs:
   notify:
     runs-on: ubuntu-latest
     steps:
-      - name: Echo webhook URL
-        run: echo "Using webhook URL: ${{ secrets.DISCORD_WEBHOOK }}"
+      - name: Validate webhook URL
+        run: |
+          echo "Webhook URL starts with: $(echo ${{ secrets.DISCORD_WEBHOOK }} | cut -c1-20)..."
+          echo "Webhook URL ends with: ...$(echo ${{ secrets.DISCORD_WEBHOOK }} | tail -c 20)"
+          echo "Webhook URL length: $(echo ${{ secrets.DISCORD_WEBHOOK }} | wc -c) characters"
       - name: Send Discord notification
         uses: rjstone/discord-webhook-notify@v2
         with:
