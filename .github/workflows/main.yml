@@ -8,11 +8,17 @@ jobs:
   notify:
     runs-on: ubuntu-latest
     steps:
+      - name: Validate webhook URL
+        run: |
+          echo "Webhook URL starts with: $(echo ${{ secrets.DISCORD_WEBHOOK }} | cut -c1-20)..."
+          echo "Webhook URL ends with: ...$(echo ${{ secrets.DISCORD_WEBHOOK }} | tail -c 20)"
+          echo "Webhook URL length: $(echo ${{ secrets.DISCORD_WEBHOOK }} | wc -c) characters"
       - name: Send Discord notification
-        uses: rjstone/discord-webhook-notify@v2
+        uses: stegzilla/discord-notify@v2
         with:
-          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
-          # El siguiente es el mensaje personalizado que quieres enviar.
-          # Utiliza la sintaxis de formato de Discord para mencionar a @everyone.
-          # Las variables como `github.event.pull_request.html_url` se llenan automáticamente.
-          content: "@everyone revisen esto vagos -- pr\n${{ github.event.pull_request.html_url }}"
+          webhook_url: ${{ secrets.DISCORD_WEBHOOK }}
+          title: New PR opened
+          message: "@everyone esta mierda\n\n**${{ github.event.pull_request.title }}**\n**Creator:** ${{ github.event.pull_request.user.login }}\n${{ github.event.pull_request.html_url }}"
+          include_image: true
+          avatar_url: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
+          username: GitHub PR Notifier

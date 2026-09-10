@@ -22,3 +22,11 @@ func (c *Config) GetDatabaseURI() string {
 func (c *Config) GetServerPort() string {
 	return c.provider.GetString("SERVER_PORT")
 }
+
+func LoadConfigFromEnv() *Config {
+	provider, err := NewEnvProvider()
+	if err != nil {
+		panic(err)
+	}
+	return NewConfig(provider)
+}
