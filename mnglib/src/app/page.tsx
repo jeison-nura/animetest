@@ -1,5 +1,5 @@
-import { NavBar } from "@/components/navbar/navBar";
+import { redirect } from "next/navigation";
 
-export default function Page() {
-  return "hola mundillo";
+export default function RootPage() {
+  redirect("/home");
 }

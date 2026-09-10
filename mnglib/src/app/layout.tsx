@@ -1,26 +1,42 @@
-import { NavBar } from "@/components/navbar/navBar";
+import type { Metadata, Viewport } from "next";
+import { Exo_2, Outfit } from "next/font/google";
+
+import { APP_DESCRIPTION, APP_NAME } from "@/shared/config/site";
+
 import "./globals.css";
+
+const fontDisplay = Exo_2({
+  subsets: ["latin"],
+  variable: "--font-exo-2",
+  display: "swap",
+});
+
+const fontSans = Outfit({
+  subsets: ["latin"],
+  variable: "--font-outfit",
+  display: "swap",
+});
+
+export const metadata: Metadata = {
+  title: {
+    default: APP_NAME,
+    template: `%s | ${APP_NAME}`,
+  },
+  description: APP_DESCRIPTION,
+};
+
+export const viewport: Viewport = {
+  themeColor: "#08080f",
+};
 
 export default function RootLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode;
-}) {
+}>) {
   return (
-    <html lang="en">
-      <body>
-        <div className="flex h-screen bg-[#8a55f8]">
-          <div>
-            <NavBar />
-          </div>
-          <div className="grow overflow-x-hidden overflow-y-auto scrollbar-hide">
-            {children}
-          </div>
-          <div className="w-72 bg-[#1e1e1e] rounded-l-xl overflow-y-auto scrollbar-hide">
-            {/* Panel lateral derecho para "continue watching" */}
-          </div>
-        </div>
-      </body>
+    <html lang="en" className={`${fontDisplay.variable} ${fontSans.variable}`}>
+      <body>{children}</body>
     </html>
   );
 }
