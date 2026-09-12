@@ -1,0 +1,180 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: mnglib
+      POSTGRES_PASSWORD: mnglib_dev
+      POSTGRES_DB: mnglib
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./postgres-init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U mnglib"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  nats:
+    image: nats:2.11-alpine
+    command: ["-js", "-m", "8222"]
+    ports:
+      - "4222:4222"
+      - "8222:8222"
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8222/healthz || exit 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  minio:
+    image: minio/minio:latest
+    command: ["server", "/data", "--console-address", ":9001"]
+    environment:
+      MINIO_ROOT_USER: mnglib
+      MINIO_ROOT_PASSWORD: mnglib_dev
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - miniodata:/data
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  minio-init:
+    image: minio/mc:latest
+    depends_on:
+      minio:
+        condition: service_healthy
+    entrypoint: >
+      /bin/sh -c "
+      mc alias set local http://minio:9000 mnglib mnglib_dev &&
+      mc mb --ignore-existing local/media &&
+      exit 0"
+
+  auth:
+    build:
+      context: ../services/auth
+    environment:
+      PORT: "8081"
+      DATABASE_URL: postgres://mnglib:mnglib_dev@postgres:5432/auth?sslmode=disable
+      ACCESS_TOKEN_TTL: 15m
+      REFRESH_TOKEN_TTL: 720h
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "/bin/healthcheck"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  catalog:
+    build:
+      context: ../services/catalog
+    environment:
+      PORT: "8082"
+      HEALTHCHECK_PORT: "8082"
+      DATABASE_URL: postgres://mnglib:mnglib_dev@postgres:5432/catalog?sslmode=disable
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "/bin/healthcheck"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  activity:
+    build:
+      context: ../services/activity
+    environment:
+      PORT: "8083"
+      HEALTHCHECK_PORT: "8083"
+      DATABASE_URL: postgres://mnglib:mnglib_dev@postgres:5432/activity?sslmode=disable
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "/bin/healthcheck"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  content:
+    build:
+      context: ../services/content
+      dockerfile: Dockerfile.api
+    environment:
+      PORT: "8084"
+      HEALTHCHECK_PORT: "8084"
+      STORAGE_PROVIDER: minio
+      DATABASE_URL: postgres://mnglib:mnglib_dev@postgres:5432/content?sslmode=disable
+      NATS_URL: nats://nats:4222
+      STORAGE_ENDPOINT: http://minio:9000
+      STORAGE_ACCESS_KEY: mnglib
+      STORAGE_SECRET_KEY: mnglib_dev
+      MEDIA_BUCKET: media
+    depends_on:
+      postgres:
+        condition: service_healthy
+      nats:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "/bin/healthcheck"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  transcode-worker:
+    build:
+      context: ../services/content
+      dockerfile: Dockerfile.worker
+    depends_on:
+      content:
+        condition: service_healthy
+      nats:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+    environment:
+      NATS_URL: nats://nats:4222
+      DATABASE_URL: postgres://mnglib:mnglib_dev@postgres:5432/content?sslmode=disable
+      STORAGE_PROVIDER: minio
+      STORAGE_ENDPOINT: http://minio:9000
+      STORAGE_ACCESS_KEY: mnglib
+      STORAGE_SECRET_KEY: mnglib_dev
+      MEDIA_BUCKET: media
+      WORK_DIR: /tmp/transcode
+
+  gateway:
+    build:
+      context: ../gateway
+    ports:
+      - "8080:8080"
+    environment:
+      PORT: "8080"
+      AUTH_SERVICE_URL: http://auth:8081
+      CATALOG_SERVICE_URL: http://catalog:8082
+      ACTIVITY_SERVICE_URL: http://activity:8083
+      CONTENT_SERVICE_URL: http://content:8084
+      ALLOWED_ORIGIN: http://localhost:3000
+    depends_on:
+      auth:
+        condition: service_healthy
+      catalog:
+        condition: service_healthy
+      activity:
+        condition: service_healthy
+      content:
+        condition: service_healthy
+
+volumes:
+  pgdata:
+  miniodata:

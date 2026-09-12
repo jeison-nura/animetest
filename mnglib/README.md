@@ -1,36 +1,71 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# MngLib — Frontend
 
-## Getting Started
+Aplicación web de anime y manga construida con Next.js (App Router), React, TypeScript y Tailwind CSS 4.
 
-First, run the development server:
+## Requisitos
+
+- Node.js >= 18
+- npm (o pnpm)
+
+## Puesta en marcha
 
 ```bash
+npm install
+cp .env.example .env.local
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abre `http://localhost:3000`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Variables de entorno
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+# Vacío → modo mock (datos de ejemplo, no requiere backend)
+NEXT_PUBLIC_API_URL=
 
-## Learn More
+# Apuntando al gateway backend → API real
+NEXT_PUBLIC_API_URL=http://localhost:8080
+```
 
-To learn more about Next.js, take a look at the following resources:
+Ver `.env.example` y `.env.local.example`.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Scripts
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+npm run dev         # servidor de desarrollo
+npm run build       # build de producción
+npm run start       # servir build de producción
+npm run lint        # ESLint
+npm run typecheck   # TypeScript
+```
 
-## Deploy on Vercel
+## Estructura
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```
+src/
+  app/            # Rutas (App Router): home, search, profile, my-list, read, watch, login
+  entities/       # Modelos y APIs de dominio: catalog, user
+  features/       # Casos de uso: auth, episode-interactions
+  widgets/        # Bloques grandes de UI: hero-carousel, video-player, manga-reader, side-nav
+  shared/         # UI base, config, helpers, cliente HTTP
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Conexión con el backend
+
+- `src/shared/api/http-client.ts` gestiona fetch al gateway, tokens y refresh.
+- `src/entities/catalog/api/catalog-api.ts` y `src/entities/user/api/user-api.ts` consumen `/catalog/*` y `/me/*`.
+- `src/features/auth/api/auth-api.ts` consume `/auth/login` y `/auth/logout`.
+- Con `NEXT_PUBLIC_API_URL` vacío, todo corre con mocks (`isMockMode()`).
+
+## Rutas principales
+
+| Ruta | Descripción |
+|---|---|
+| `/home` | Home con hero carousel, tendencias, top picks |
+| `/search` | Búsqueda de anime y manga |
+| `/my-list` | Listas personales del usuario |
+| `/favourites` | Favoritos |
+| `/profile` | Perfil, stats, actividad, ajustes |
+| `/watch/:id` | Player de anime |
+| `/read/:id` | Lector de manga |
+| `/login` | Autenticación |

@@ -1,0 +1,4 @@
+DROP TABLE IF EXISTS hero_slides;
+DROP TABLE IF EXISTS entry_genres;
+DROP TABLE IF EXISTS genres;
+DROP TABLE IF EXISTS entries;
