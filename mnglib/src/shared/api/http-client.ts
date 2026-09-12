@@ -65,8 +65,27 @@ async function request<TResponse>(
   });
 
   if (!response.ok) {
-    if (response.status === 401 && typeof window !== "undefined") {
+    if (response.status === 401 && typeof window !== "undefined" && !path.startsWith("/auth/")) {
+      try {
+        const refreshResponse = await fetch(`${API_BASE_URL}/auth/refresh`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({ refreshToken: getRefreshToken() }),
+        });
+
+        if (refreshResponse.ok) {
+          const data = await refreshResponse.json();
+          tokenStorage.set(data.accessToken);
+          setRefreshToken(data.refreshToken);
+          return request<TResponse>(method, path, options);
+        }
+      } catch {
+        // Refresh failed; fall through to logout
+      }
+
       tokenStorage.clear();
+      clearRefreshToken();
       window.location.assign("/login");
     }
     throw new ApiError(
@@ -80,6 +99,22 @@ async function request<TResponse>(
   }
 
   return (await response.json()) as TResponse;
+}
+
+function getRefreshToken(): string | null {
+  if (typeof document === "undefined") return null;
+  const match = document.cookie.match(/mnglib_refresh=([^;]*)/);
+  return match ? match[1] : null;
+}
+
+function setRefreshToken(token: string): void {
+  if (typeof document === "undefined") return;
+  document.cookie = `mnglib_refresh=${token}; path=/; max-age=2592000; samesite=lax`;
+}
+
+function clearRefreshToken(): void {
+  if (typeof document === "undefined") return;
+  document.cookie = "mnglib_refresh=; path=/; max-age=0";
 }
 
 export const http = {

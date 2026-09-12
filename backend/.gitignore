@@ -1,0 +1,17 @@
+# Binarios
+gateway/gateway
+services/auth/auth
+gateway/bin/
+services/auth/bin/
+
+*.test
+*.out
+
+# Go module caches
+.gocache/
+
+# Env local
+.env
+
+# Docker
+deploy/*.env

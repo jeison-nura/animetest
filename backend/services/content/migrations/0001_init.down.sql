@@ -1,0 +1,4 @@
+DROP TABLE IF EXISTS upload_jobs;
+DROP TABLE IF EXISTS chapter_pages;
+DROP TABLE IF EXISTS sources;
+DROP TABLE IF EXISTS providers;

@@ -1,0 +1,1 @@
+ALTER TABLE upload_jobs ADD COLUMN IF NOT EXISTS object_key text NOT NULL DEFAULT '';

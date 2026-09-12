@@ -1,0 +1,23 @@
+# syntax=docker/dockerfile:1.7
+FROM golang:1.25-alpine AS build
+RUN apk add --no-cache ffmpeg
+WORKDIR /src
+COPY go.mod go.sum* ./
+RUN go mod download || true
+COPY . .
+RUN go mod tidy && CGO_ENABLED=0 go build -ldflags="-s -w" -o /bin/content ./cmd/content
+RUN CGO_ENABLED=0 go build -ldflags="-s -w" -o /bin/transcode-worker ./cmd/transcode-worker
+
+# healthchecker estático (distroless no tiene shell)
+FROM golang:1.25-alpine AS healthcheck-build
+WORKDIR /src
+COPY cmd/healthcheck/main.go ./main.go
+RUN CGO_ENABLED=0 go build -ldflags="-s -w" -o /bin/healthcheck main.go
+
+FROM gcr.io/distroless/static-debian12:nonroot
+WORKDIR /app
+COPY --from=build /bin/content /bin/content
+COPY --from=healthcheck-build /bin/healthcheck /bin/healthcheck
+COPY migrations /app/migrations
+EXPOSE 8084
+ENTRYPOINT ["/bin/content"]
