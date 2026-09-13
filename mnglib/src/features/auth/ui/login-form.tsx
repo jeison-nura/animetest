@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState, type FormEvent } from "react";
 
 import {
@@ -84,6 +85,12 @@ function LoginForm({ onSubmit, error }: LoginFormProps) {
               {error}
             </p>
           )}
+          <p className="text-sm text-muted-foreground">
+            Don&apos;t have an account?{" "}
+            <Link href="/register" className="font-medium text-primary hover:underline">
+              Create one
+            </Link>
+          </p>
         </form>
       </CardContent>
     </Card>
