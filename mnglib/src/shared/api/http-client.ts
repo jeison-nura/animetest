@@ -8,11 +8,13 @@ export function isMockMode(): boolean {
 
 export class ApiError extends Error {
   readonly status: number;
+  readonly payload: unknown;
 
-  constructor(status: number, message: string) {
+  constructor(status: number, message: string, payload?: unknown) {
     super(message);
     this.name = "ApiError";
     this.status = status;
+    this.payload = payload;
   }
 }
 
@@ -65,6 +67,14 @@ async function request<TResponse>(
   });
 
   if (!response.ok) {
+    let payload: unknown;
+
+    try {
+      payload = await response.json();
+    } catch {
+      payload = undefined;
+    }
+
     if (response.status === 401 && typeof window !== "undefined" && !path.startsWith("/auth/")) {
       try {
         const refreshResponse = await fetch(`${API_BASE_URL}/auth/refresh`, {
@@ -90,7 +100,8 @@ async function request<TResponse>(
     }
     throw new ApiError(
       response.status,
-      `Request to ${path} failed with status ${response.status}`
+      `Request to ${path} failed with status ${response.status}`,
+      payload
     );
   }
 
