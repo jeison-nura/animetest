@@ -1,20 +1,20 @@
 use std::env;
 
-#[derive(Debug)]
-pub struct ConfigError(pub String);
-
-#[derive(Clone)]
+#[derive(Debug, Clone)]
 pub struct Config {
     pub port: u16,
     pub database_url: String,
 }
+
+#[derive(Debug)]
+pub struct ConfigError(pub String);
 
 impl Config {
     pub fn from_env() -> Self {
         Self {
             port: env::var("PORT")
                 .ok()
-                .and_then(|p| p.parse().ok())
+                .and_then(|port| port.parse().ok())
                 .unwrap_or(8082),
             database_url: env::var("DATABASE_URL")
                 .unwrap_or_else(|_| "postgres://mnglib:mnglib_dev@localhost:5432/catalog".into()),
@@ -38,28 +38,31 @@ mod tests {
 
     #[test]
     fn validate_rejects_zero_port() {
-        let cfg = Config {
+        let config = Config {
             port: 0,
-            database_url: "postgres://localhost/test".into(),
+            database_url: "postgres://localhost/catalog".into(),
         };
-        assert!(cfg.validate().is_err());
+
+        assert!(config.validate().is_err());
     }
 
     #[test]
     fn validate_rejects_empty_database_url() {
-        let cfg = Config {
+        let config = Config {
             port: 8082,
-            database_url: "".into(),
+            database_url: String::new(),
         };
-        assert!(cfg.validate().is_err());
+
+        assert!(config.validate().is_err());
     }
 
     #[test]
     fn validate_accepts_valid_config() {
-        let cfg = Config {
+        let config = Config {
             port: 8082,
             database_url: "postgres://localhost/catalog".into(),
         };
-        assert!(cfg.validate().is_ok());
+
+        assert!(config.validate().is_ok());
     }
 }

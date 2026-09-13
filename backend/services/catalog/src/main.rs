@@ -1,10 +1,16 @@
+mod adapters;
+mod app;
 mod config;
-mod handlers;
-mod models;
-mod repo;
+mod domain;
 
-use axum::{routing::get, Router};
+use std::sync::Arc;
+
 use sqlx::postgres::PgPoolOptions;
+
+use crate::adapters::http::{router, AppState};
+use crate::adapters::postgres::PostgresCatalogRepo;
+use crate::app::CatalogService;
+use crate::config::Config;
 
 #[tokio::main]
 async fn main() {
@@ -15,13 +21,13 @@ async fn main() {
         )
         .init();
 
-    let cfg = config::Config::from_env();
-    cfg.validate().expect("invalid config");
+    let config = Config::from_env();
+    config.validate().expect("invalid config");
 
     let pool = PgPoolOptions::new()
         .max_connections(10)
         .acquire_timeout(std::time::Duration::from_secs(10))
-        .connect(&cfg.database_url)
+        .connect(&config.database_url)
         .await
         .expect("database connection failed");
 
@@ -30,21 +36,16 @@ async fn main() {
         .await
         .expect("migrations failed");
 
-    let state = handlers::AppState { pool };
+    let state = AppState {
+        service: CatalogService::new(Arc::new(PostgresCatalogRepo::new(pool))),
+    };
 
-    let app = Router::new()
-        .route("/catalog/hero-slides", get(handlers::hero_slides))
-        .route("/catalog/top-picks", get(handlers::top_picks))
-        .route("/catalog/search", get(handlers::search))
-        .route("/catalog/trending", get(handlers::trending))
-        .route("/catalog/top-manga", get(handlers::top_manga))
-        .route("/catalog/entries/{id}", get(handlers::get_entry))
-        .route("/healthz", get(|| async { "ok" }))
-        .with_state(state);
-
-    let addr = format!("0.0.0.0:{}", cfg.port);
-    tracing::info!("catalog listening on {addr}");
-
-    let listener = tokio::net::TcpListener::bind(&addr).await.expect("bind");
-    axum::serve(listener, app).await.expect("serve");
+    let address = format!("0.0.0.0:{}", config.port);
+    tracing::info!("catalog listening on {address}");
+    let listener = tokio::net::TcpListener::bind(&address)
+        .await
+        .expect("failed to bind");
+    axum::serve(listener, router(state))
+        .await
+        .expect("server failed");
 }
